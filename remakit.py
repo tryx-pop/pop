@@ -10,8 +10,8 @@ if not TOKEN:
 
 
 CHANNEL_NAME = "📩┃deadline-check"
-CHECK_HOUR = 20
-CHECK_MINUTE = 54
+CHECK_HOUR = 23
+CHECK_MINUTE = 00
 LOCAL_TZ = timezone(timedelta(hours=1))  
 
 intents = discord.Intents.default()
