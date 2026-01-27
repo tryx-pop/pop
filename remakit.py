@@ -1,16 +1,18 @@
+import os
 import discord
-import os 
-TOKEN = os.getenv("DISCORD_TOKEN")
 from discord.ext import tasks
 from datetime import datetime, timezone, timedelta
 
-# -------------------- CONFIG --------------------
-TOKEN = "MTQ2NTQ1NTc4NzY2ODI3NTIyMA.GEvMZK._t2eDpUlTvHa04gHbE75J84OpJgN3zWdItQ4wI"  # 🔑 Remplace par ton token
+TOKEN = os.getenv("DISCORD_TOKEN")
+
+if not TOKEN:
+    raise RuntimeError("DISCORD_TOKEN non défini dans les variables d’environnement")
+
+
 CHANNEL_NAME = "📩┃deadline-check"
 CHECK_HOUR = 18
 CHECK_MINUTE = 43
 LOCAL_TZ = timezone(timedelta(hours=1))  # France = UTC+1 / UTC+2 en été
-# ------------------------------------------------
 
 intents = discord.Intents.default()
 intents.message_content = True
