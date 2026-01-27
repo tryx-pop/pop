@@ -10,20 +10,20 @@ if not TOKEN:
 
 
 CHANNEL_NAME = "📩┃deadline-check"
-CHECK_HOUR = 18
-CHECK_MINUTE = 43
-LOCAL_TZ = timezone(timedelta(hours=1))  # France = UTC+1 / UTC+2 en été
+CHECK_HOUR = 23
+CHECK_MINUTE = 00
+LOCAL_TZ = timezone(timedelta(hours=1))  
 
 intents = discord.Intents.default()
 intents.message_content = True
-intents.members = True  # nécessaire pour ping les membres
+intents.members = True  
 
 client = discord.Client(intents=intents)
 
 @client.event
 async def on_ready():
     print(f"Connecté en tant que {client.user}")
-    check_deadlines.start()  # démarre la tâche quotidienne
+    check_deadlines.start()  
 
 @tasks.loop(minutes=1)
 async def check_deadlines():
@@ -31,32 +31,32 @@ async def check_deadlines():
     if now.hour == CHECK_HOUR and now.minute == CHECK_MINUTE:
         print("Vérification des deadlines en cours...")
 
-        # Récupère le serveur et le channel
-        guild = client.guilds[0]  # si ton bot est sur un seul serveur
+        
+        guild = client.guilds[0]  
         channel = discord.utils.get(guild.text_channels, name=CHANNEL_NAME)
         if not channel:
             print(f"Channel '{CHANNEL_NAME}' non trouvé")
             return
 
-        # Récupère les 100 derniers messages
+        
         messages = [msg async for msg in channel.history(limit=100)]
 
         today = now.date()
         posted_users = set()
 
         for msg in messages:
-            # Convertit le timestamp UTC du message en heure locale
+            
             local_msg_date = msg.created_at.astimezone(LOCAL_TZ).date()
             if local_msg_date == today:
                 posted_users.add(msg.author.id)
 
-        # Récupère le rôle "Clipper"
+        
         clipper_role = discord.utils.get(guild.roles, name="Clipper")
         if not clipper_role:
             print("Le rôle 'Clipper' n'existe pas sur le serveur !")
             return
 
-        # Ping uniquement les membres qui ont le rôle "Clipper" et n'ont pas posté
+        
         for member in guild.members:
             if (
                 not member.bot
@@ -72,5 +72,5 @@ async def check_deadlines():
 
         print("Vérification terminée")
 
-# Démarre le bot
+
 client.run(TOKEN)
