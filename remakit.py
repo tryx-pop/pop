@@ -1,5 +1,6 @@
 import os
 import discord
+import pytz
 from discord.ext import tasks
 from datetime import datetime, timezone, timedelta
 
@@ -12,7 +13,7 @@ if not TOKEN:
 CHANNEL_NAME = "📩┃deadline-check"
 CHECK_HOUR = 23
 CHECK_MINUTE = 00
-LOCAL_TZ = timezone(timedelta(hours=1))  
+LOCAL_TZ = pytz.timezone("Europe/Paris")
 
 intents = discord.Intents.default()
 intents.message_content = True
